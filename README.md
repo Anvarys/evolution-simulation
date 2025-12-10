@@ -8,9 +8,10 @@ This is a project about simulating [Evolution](https://en.wikipedia.org/wiki/Evo
 3. Add genes that will affect them
 4. Add mutations (essential for natural selection)
 5. Add charts to show data of the simulation
-5. Add parameters to the simulation
-6. Make a neat visualisation to visualise all of this
-7. Add more science stuff to the site (idk what for the moment being)
+6. Publish to [Cloudflare Pages](pages.dev)
+7. Add parameters to the simulation
+8. Make a neat visualisation to visualise all of this
+9. Add more science stuff to the site (idk what for the moment being)
 
 ---
 

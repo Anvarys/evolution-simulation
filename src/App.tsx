@@ -1,7 +1,37 @@
+import { Card } from "./components/ui/card"
+import Simulation from "./Simulation"
+import { useState } from "react"
+import type { Parameters } from "./types"
+
+
+function getInitialParameters(): Parameters {
+  return {
+    initialPopulation: 10,
+    updateInterval: 10000
+  } as Parameters
+}
+
+
 function App() {
+  const [parameters, setParameters] = useState<Parameters>(getInitialParameters())
+
   return (
     <div className='min-h-[100dvh] min-w-full flex items-center justify-center p-[2dvh] bg-neutral-950'>
-      <h1 className='text-4xl font-bold text-neutral-200'>Evolution Simulation WIP</h1>
+      <div className='flex gap-8 w-full max-w-[96dvw] h-[96dvh]'>
+
+      {/* Simulation visual area */}
+      <Card className="flex-1 aspect-square bg-neutral-900 p-0 overflow-hidden max-h-full min-w-[96dvh] max-w-[96dvh] border-neutral-800 text-neutral-200">
+        <Simulation 
+          initialPopulation={parameters.initialPopulation}
+          updateInterval={parameters.updateInterval}
+        />
+      </Card>
+
+      {/* Sidebar */}
+      <Card className="grow h-full p-6 space-y-6 bg-neutral-900 grow flex flex-col justify-between border-neutral-800 text-neutral-200">
+        Sidebar
+      </Card>
+      </div>
     </div>
   )
 }
