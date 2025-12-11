@@ -3,10 +3,10 @@ This is a project about simulating [Evolution](https://en.wikipedia.org/wiki/Evo
 
 ## TODO
 
-1. Make species and so that they can multiply
-2. Add a genome system for species
-3. Add genes that will affect them
-4. Add mutations (essential for natural selection)
+1. Make species and so that they can multiply ✅
+2. Add a genome system for species ✅
+3. Add genes that will affect them ✅
+4. Add mutations (essential for natural selection) ✅
 5. Add charts to show data of the simulation
 6. Publish to [Cloudflare Pages](pages.dev)
 7. Add parameters to the simulation

@@ -24,5 +24,14 @@ export type Species = {
 export type Traits = {
     timeToMultiply: number,
     lifeLenght: number,
-    timeToMature: number
+    timeToMature: number,
+    mutationChance: number,
+    mutationRate: number
+}
+
+export function mutateSpecies(species: Species): Species {
+    for (const trait in species.traits){
+        species.traits[trait as keyof Traits] += (Math.random() - 0.5) * species.traits.mutationRate * species.traits[trait as keyof Traits]
+    }
+    return species
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import type { SimulationData, SimulationParams, Species } from "./types";
+import { mutateSpecies, type SimulationData, type SimulationParams, type Species } from "./types";
 
 const Simulation: React.FC<SimulationParams> = ({
   initialPopulation,
@@ -32,6 +32,14 @@ const Simulation: React.FC<SimulationParams> = ({
 
     function createOffspring(species: Species) {
       if (creatures.length / dataPerCreature >= maxCreatures) {return}
+
+      if (Math.random() < species.traits.mutationChance) {
+        const newSpecies = mutateSpecies(species)
+        newSpecies.id = speciesRef.current.length
+        speciesRef.current.push(newSpecies)
+
+        species = newSpecies
+      }
       
       creatures.push(species.id) // species id
       creatures.push(time) // Alive since

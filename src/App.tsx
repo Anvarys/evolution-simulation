@@ -7,9 +7,9 @@ import type { Parameters, Species } from "./types"
 function getInitialParameters(): Parameters {
   return {
     initialPopulation: 10,
-    iterationsPerFrame: 1,
+    iterationsPerFrame: 50,
     maxCreatures: 100000
-  } as Parameters
+  }
 }
 
 function getInitialSpecies(): Species[] {
@@ -18,7 +18,9 @@ function getInitialSpecies(): Species[] {
     traits: {
       timeToMultiply: 20,
       lifeLenght: 50,
-      timeToMature: 10
+      timeToMature: 10,
+      mutationChance: 0.00001,
+      mutationRate: 0.1
     }
   }]
 }
