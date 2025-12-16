@@ -2,13 +2,14 @@ import { Card } from "./components/ui/card"
 import Simulation from "./Simulation"
 import { useEffect, useRef, useState } from "react"
 import type { Parameters, Species } from "./types"
+import { Slider } from "./components/ui/slider"
 
 
 function getInitialParameters(): Parameters {
   return {
     initialPopulation: 10,
-    iterationsPerFrame: 50,
-    maxCreatures: 100000
+    iterationsPerFrame: 500,
+    maxCreatures: 10000
   }
 }
 
@@ -19,7 +20,7 @@ function getInitialSpecies(): Species[] {
       timeToMultiply: 20,
       lifeLenght: 50,
       timeToMature: 10,
-      mutationChance: 0.00001,
+      mutationChance: 0.000001,
       mutationRate: 0.1
     }
   }]
@@ -50,7 +51,11 @@ function App() {
 
       {/* Sidebar */}
       <Card className="grow h-full p-6 space-y-6 bg-neutral-900 grow flex flex-col justify-between border-neutral-800 text-neutral-200">
-        Sidebar
+        <div className="space-y-4">
+          <Slider>
+
+          </Slider>
+        </div>
       </Card>
       </div>
     </div>

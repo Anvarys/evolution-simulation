@@ -13,7 +13,16 @@ export type Parameters = {
 
 export type SimulationData = {
     population: number,
-    time: number
+    time: number,
+    mostPopularSpeciesId: number,
+    mostPopularSpeciesCount: number
+}
+
+export type ChartDataPoint = {
+    time: number,
+    population: number,
+    mostPopularSpeciesTimeToMultiply: number,
+    mostPopularSpeciesCount: number
 }
 
 export type Species = {
@@ -34,4 +43,8 @@ export function mutateSpecies(species: Species): Species {
         species.traits[trait as keyof Traits] += (Math.random() - 0.5) * species.traits.mutationRate * species.traits[trait as keyof Traits]
     }
     return species
+}
+
+export function traitsToString(traits: Traits): string {
+    return `Time to multiply: ${traits.timeToMultiply.toFixed(2)}\nLife length: ${traits.lifeLenght.toFixed(2)}\nTime to mature: ${traits.timeToMature.toFixed(2)}\nMutation chance: ${traits.mutationChance.toFixed(6)}\nMutation rate: ${traits.mutationRate.toFixed(4)}`
 }
