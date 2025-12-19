@@ -3,21 +3,27 @@ import { mutateSpecies, traitsToString, type ChartDataPoint, type SimulationData
 import { ChartContainer, type ChartConfig } from "./components/ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
-const chartConfig = {
+const timesChartConfig = {
   mostPopularSpeciesTimeToMultiply: {
     label: "Time to Multiply",
-    color: "#16a34a",
+    color: "#5f38faff",
+  },
+  mostPopularSpeciesLifeLenght: {
+    label: "Life Length",
+    color: "#eb255dff",
+  },
+  mostPopularSpeciesTimeToMature: {
+    label: "Time to Mature",
+    color: "#3ceb25ff",
   },
 } satisfies ChartConfig
 
 const Simulation: React.FC<SimulationParams> = ({
-  initialPopulation,
-  iterationsPerFrame,
-  maxCreatures,
+  parameters,
   speciesRef
 }) => {
   const [simulationData, setSimulationData] = useState<SimulationData>({
-    population: initialPopulation, time: 0, mostPopularSpeciesId: 0, mostPopularSpeciesCount: 0
+    population: parameters.initialPopulation, time: 0, mostPopularSpeciesId: 0, mostPopularSpeciesCount: 0
   })
 
   const frameIdRef = useRef<number>(-1);
@@ -33,7 +39,7 @@ const Simulation: React.FC<SimulationParams> = ({
     const dataPerCreature = 3
     const creatures: number[] = []
 
-    for (let i = 0; i < initialPopulation; i++){
+    for (let i = 0; i < parameters.initialPopulation; i++){
       for (let species of speciesRef.current){
         creatures.push(species.id) // species id
         creatures.push(0) // Alive since
@@ -42,7 +48,7 @@ const Simulation: React.FC<SimulationParams> = ({
     }
 
     function createOffspring(species: Species) {
-      if (creatures.length / dataPerCreature >= maxCreatures) {return}
+      if (creatures.length / dataPerCreature >= parameters.maxCreatures) {return}
 
       if (Math.random() < species.traits.mutationChance) {
         const newSpecies = mutateSpecies(species)
@@ -81,7 +87,9 @@ const Simulation: React.FC<SimulationParams> = ({
 
     
     const frameLoop = () => {
-      for (let i = 0; i < iterationsPerFrame; i++){
+      console.log(parameters)
+
+      for (let i = 0; i < parameters.iterationsPerFrame; i++){
         loop()
       }
 
@@ -112,13 +120,13 @@ const Simulation: React.FC<SimulationParams> = ({
         time: time,
         population: creatures.length / dataPerCreature,
         mostPopularSpeciesCount: creatureCount[popularSpeciesId] || 0,
-        mostPopularSpeciesTimeToMultiply: speciesRef.current[popularSpeciesId].traits.timeToMultiply
+        mostPopularSpeciesTimeToMultiply: speciesRef.current[popularSpeciesId].traits.timeToMultiply,
+        mostPopularSpeciesLifeLenght: speciesRef.current[popularSpeciesId].traits.lifeLenght,
+        mostPopularSpeciesTimeToMature: speciesRef.current[popularSpeciesId].traits.timeToMature,
       } as ChartDataPoint)
 
       if (frameIdRef.current % 10 === 0)
       setIterationsPerSecond(time/(performance.now()-simulationStartTimeRef.current)*1000)
-    
-      console.log(Math.max(Math.floor(simulationData.time/15/iterationsPerFrame)*iterationsPerFrame-1, (iterationsPerFrame*120)-1))
 
       if (creatures.length !== 0)
       frameIdRef.current = requestAnimationFrame(frameLoop);
@@ -129,12 +137,11 @@ const Simulation: React.FC<SimulationParams> = ({
 
   return (<>
   
-  <div>iterations per frame: {iterationsPerFrame}<br/>population: {simulationData.population}<br/>current time: {simulationData.time}<br/>Avg iterations per second: {iterationsPerSecond.toFixed(0)}<br/><br/>Most popular species:<br/>{traitsToString(speciesRef.current[simulationData.mostPopularSpeciesId].traits)}<br/>popular population: {simulationData.mostPopularSpeciesCount}</div>
+  <div>iterations per frame: {parameters.iterationsPerFrame}<br/>population: {simulationData.population}<br/>current time: {simulationData.time}<br/>Avg iterations per second: {iterationsPerSecond.toFixed(0)}<br/><br/>Most popular species:<br/>{traitsToString(speciesRef.current[simulationData.mostPopularSpeciesId].traits)}</div>
   <div>
-    <ChartContainer config={chartConfig} className="p-2 w-full flex-1 min-h-0">
+    <ChartContainer config={timesChartConfig} className="p-2 w-full flex-1 min-h-0">
       <LineChart 
         key={frameIdRef.current+updateChartLines}
-        accessibilityLayer
         data={chartDataRef.current}
         margin={{}}
       >
@@ -143,7 +150,7 @@ const Simulation: React.FC<SimulationParams> = ({
           tickMargin={0}
           tickLine={false}
           startOffset={1}
-          interval={Math.max(Math.floor(chartDataRef.current.length/12/100)*100-1, iterationsPerFrame/15)}
+          interval={Math.floor(Math.max(Math.floor(chartDataRef.current.length/12/100)*100-1, parameters.iterationsPerFrame/10))}
         />
         <YAxis
             tickLine={false}
@@ -151,7 +158,23 @@ const Simulation: React.FC<SimulationParams> = ({
         <Line 
           dataKey="mostPopularSpeciesTimeToMultiply"
           type="monotone"
-          stroke="#16a34a"
+          stroke="#5f38faff"
+          strokeWidth={2}
+          dot={false}
+          isAnimationActive={false}
+        />
+        <Line 
+          dataKey="mostPopularSpeciesLifeLenght"
+          type="monotone"
+          stroke="#eb255dff"
+          strokeWidth={2}
+          dot={false}
+          isAnimationActive={false}
+        />
+        <Line 
+          dataKey="mostPopularSpeciesTimeToMature"
+          type="monotone"
+          stroke="#3ceb25ff"
           strokeWidth={2}
           dot={false}
           isAnimationActive={false}

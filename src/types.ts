@@ -1,7 +1,5 @@
 export interface SimulationParams {
-    initialPopulation: number;
-    iterationsPerFrame: number;
-    maxCreatures: number;
+    parameters: Parameters,
     speciesRef: React.RefObject<Species[]>;
 }
 
@@ -22,7 +20,9 @@ export type ChartDataPoint = {
     time: number,
     population: number,
     mostPopularSpeciesTimeToMultiply: number,
-    mostPopularSpeciesCount: number
+    mostPopularSpeciesCount: number,
+    mostPopularSpeciesLifeLenght: number,
+    mostPopularSpeciesTimeToMature: number,
 }
 
 export type Species = {
@@ -39,9 +39,9 @@ export type Traits = {
 }
 
 export function mutateSpecies(species: Species): Species {
-    for (const trait in species.traits){
-        species.traits[trait as keyof Traits] += (Math.random() - 0.5) * species.traits.mutationRate * species.traits[trait as keyof Traits]
-    }
+    const traitsKeys = Object.keys(species.traits) as (keyof Traits)[]
+    const trait = traitsKeys[Math.floor(Math.random() * traitsKeys.length)]
+    species.traits[trait as keyof Traits] += (Math.random() - 0.5) * species.traits.mutationRate * species.traits[trait as keyof Traits]
     return species
 }
 
