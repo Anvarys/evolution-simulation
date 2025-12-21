@@ -7,6 +7,7 @@ import { Label } from "./components/ui/label"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./components/ui/tooltip"
 import { InfoIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
+import { Input } from "./components/ui/input"
 
 
 function getInitialParameters(): Parameters {
@@ -17,39 +18,38 @@ function getInitialParameters(): Parameters {
   }
 }
 
-function getInitialSpecies(): Species[] {
-  return [{
-    id: 0,
-    traits: {
-      timeToMultiply: 20,
-      lifeLenght: 50,
-      timeToMature: 10,
-      mutationChance: 0.0001,
-      mutationRate: 0.05
-    }
-  }]
-}
-
-
 function App() {
   const [parameters, setParameters] = useState<Parameters>(getInitialParameters())
-  const [traits, setTraits] = useState<Traits>({
-      timeToMultiply: 20,
-      lifeLenght: 50,
-      timeToMature: 10,
-      mutationChance: 0.0001,
-      mutationRate: 0.05
-    } as Traits)
+  const [traitsInput, setTraitsInput] = useState({
+      timeToMultiply: "20",
+      lifeLenght: "50",
+      timeToMature: "10",
+      mutationChance: "0.0001",
+      mutationRate: "0.05"
+    })
   const [committedParameters, setCommittedParameters] = useState<Parameters>(getInitialParameters())
   const [restartKey, setRestartKey] = useState(0)
-  const speciesRef = useRef<Species[]>(getInitialSpecies())
+  const speciesRef = useRef<Species[]>([getInitialSpecies()])
 
   useEffect(() => {
 
   }, [])
 
+  function getInitialSpecies(): Species {
+    return {
+      id: 0,
+      traits: {
+        timeToMultiply: Number(traitsInput.timeToMultiply),
+        lifeLenght: Number(traitsInput.lifeLenght),
+        timeToMature: Number(traitsInput.timeToMature),
+        mutationChance: Number(traitsInput.mutationChance),
+        mutationRate: Number(traitsInput.mutationRate)
+      } as Traits
+    }
+  }
+
   function restartSimulation() {
-    speciesRef.current = getInitialSpecies()
+    speciesRef.current = [getInitialSpecies()]
     setCommittedParameters(parameters)
     setRestartKey(restartKey+1)
   }
@@ -154,6 +154,118 @@ function App() {
             </div>
         </div>
 
+        <div className="flex flex-col gap-3">
+          <span className="text-center">Initial species</span>
+          <div className="flex flex-col justify-between gap-1">
+            <Label className="">Life length
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width='1rem' height='1rem'/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Life length of creatures</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Input
+              inputMode="numeric"
+              placeholder="42"
+              value={traitsInput.lifeLenght}
+              min={1}
+              onChange={(e) => {
+                setTraitsInput({...traitsInput, lifeLenght: e.target.value.replace(/[^0-9\.]/g, "")})
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col justify-between gap-1">
+            <Label className="">Time to mature
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width="1rem" height="1rem"/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Time that the creature<br/>needs to live until<br/>it can multiply</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Input
+              inputMode="numeric"
+              placeholder="42"
+              value={traitsInput.timeToMature}
+              min={1}
+              onChange={(e) => {
+                setTraitsInput({...traitsInput, timeToMature: e.target.value.replace(/[^0-9\.]/g, "")})
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col justify-between gap-1">
+            <Label className="">Time to multiply
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width="1rem" height="1rem"/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Time a creature<br/>takes to multiply</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Input
+              inputMode="numeric"
+              placeholder="42"
+              value={traitsInput.timeToMultiply}
+              min={1}
+              onChange={(e) => {
+                setTraitsInput({...traitsInput, timeToMultiply: e.target.value.replace(/[^0-9\.]/g, "")})
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col justify-between gap-1">
+            <Label className="">Mutation chance
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width="1rem" height="1rem"/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Probabilty of a mutation of<br/>a gene in an offspring</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Input
+              inputMode="numeric"
+              placeholder="0.42"
+              value={traitsInput.mutationChance}
+              min={1}
+              onChange={(e) => {
+                setTraitsInput({...traitsInput, mutationChance: e.target.value.replace(/[^0-9\.]/g, "")})
+              }}
+            />
+          </div>
+
+          <div className="flex flex-col justify-between gap-1">
+            <Label className="">Mutation rate
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width="1rem" height="1rem"/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Max proportion of the gene mutation<br/><br/>Example:<br/>Trait's value is <span className="text-violet-200">100</span> and mutation rate<br/>is <span className="text-violet-200">0.1</span>, then when gene mutates it would<br/>change by <span className="text-violet-200">±5</span> from <span className="text-violet-200">-100*0.1/2</span> to <span className="text-violet-200">+100*0.1/2</span></p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+            <Input
+              inputMode="numeric"
+              placeholder="0.42"
+              value={traitsInput.mutationRate}
+              min={1}
+              onChange={(e) => {
+                setTraitsInput({...traitsInput, mutationRate: e.target.value.replace(/[^0-9\.]/g, "")})
+              }}
+            />
+          </div>
+        </div>
 
         <Button onClick={restartSimulation}
           className="bg-violet-800 border-violet-700 border hover:bg-violet-700 border-violet-600 cursor-pointer"
