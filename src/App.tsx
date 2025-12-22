@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./components/ui/tooltip
 import { InfoIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
+import { Checkbox } from "./components/ui/checkbox"
 
 
 function getInitialParameters(): Parameters {
@@ -30,10 +31,13 @@ function App() {
   const [committedParameters, setCommittedParameters] = useState<Parameters>(getInitialParameters())
   const [restartKey, setRestartKey] = useState(0)
   const speciesRef = useRef<Species[]>([getInitialSpecies()])
+  const [restartOnUpdate, setRestartOnUpdate] = useState<boolean>(false)
 
   useEffect(() => {
-
-  }, [])
+    if (restartOnUpdate) {
+      restartSimulation()
+    }
+  }, [parameters, traitsInput])
 
   function getInitialSpecies(): Species {
     return {
@@ -58,6 +62,16 @@ function App() {
     setParameters({...parameters, [parameter]: value} )
   }
 
+  function areParametersValid(): boolean {
+    const initialSpecies = getInitialSpecies()
+    for (const trait in initialSpecies.traits){
+      if (Number.isNaN(initialSpecies.traits[trait as keyof Traits])) {
+        return false
+      }
+    }
+    return true
+  }
+
   return (
     <div className='min-h-[100dvh] min-w-full flex items-center justify-center p-[2dvh] bg-neutral-950'>
       <div className='flex gap-8 w-full max-w-[96dvw] h-[96dvh]'>
@@ -70,9 +84,8 @@ function App() {
           speciesRef={speciesRef}
         />
       </Card>
-
       {/* Sidebar */}
-      <Card className="grow h-full p-6 bg-neutral-900 grow flex flex-col justify-between border-neutral-800 text-neutral-200">
+      <Card className="grow h-full p-6 bg-neutral-900 grow flex flex-col border-neutral-800 text-neutral-200">
         <div className="space-y-4 flex flex-col">
           <span className="text-center">Parameters</span>
           <div className="space-y-2">
@@ -171,6 +184,7 @@ function App() {
               inputMode="numeric"
               placeholder="42"
               value={traitsInput.lifeLenght}
+              aria-invalid={Number.isNaN(Number(traitsInput.lifeLenght))}
               min={1}
               onChange={(e) => {
                 setTraitsInput({...traitsInput, lifeLenght: e.target.value.replace(/[^0-9\.]/g, "")})
@@ -193,6 +207,7 @@ function App() {
               inputMode="numeric"
               placeholder="42"
               value={traitsInput.timeToMature}
+              aria-invalid={Number.isNaN(Number(traitsInput.timeToMature))}
               min={1}
               onChange={(e) => {
                 setTraitsInput({...traitsInput, timeToMature: e.target.value.replace(/[^0-9\.]/g, "")})
@@ -215,6 +230,7 @@ function App() {
               inputMode="numeric"
               placeholder="42"
               value={traitsInput.timeToMultiply}
+              aria-invalid={Number.isNaN(Number(traitsInput.timeToMultiply))}
               min={1}
               onChange={(e) => {
                 setTraitsInput({...traitsInput, timeToMultiply: e.target.value.replace(/[^0-9\.]/g, "")})
@@ -237,6 +253,7 @@ function App() {
               inputMode="numeric"
               placeholder="0.42"
               value={traitsInput.mutationChance}
+              aria-invalid={Number.isNaN(Number(traitsInput.mutationChance))}
               min={1}
               onChange={(e) => {
                 setTraitsInput({...traitsInput, mutationChance: e.target.value.replace(/[^0-9\.]/g, "")})
@@ -259,6 +276,7 @@ function App() {
               inputMode="numeric"
               placeholder="0.42"
               value={traitsInput.mutationRate}
+              aria-invalid={Number.isNaN(Number(traitsInput.mutationRate))}
               min={1}
               onChange={(e) => {
                 setTraitsInput({...traitsInput, mutationRate: e.target.value.replace(/[^0-9\.]/g, "")})
@@ -266,12 +284,28 @@ function App() {
             />
           </div>
         </div>
+        <div className="flex-1 w-full flex flex-col justify-end gap-2">
+          <div className="flex flex-row justify-between items-center">
+            <Checkbox onCheckedChange={(checked: boolean) => {setRestartOnUpdate(checked)}}/>
+            <Label>Restart on update
+              <Tooltip>
+                <TooltipTrigger>
+                  <InfoIcon color="white" width="1rem" height="1rem"/>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Automatically restarts the<br/>simulation after you change<br/>any parameter</p>
+                </TooltipContent>
+              </Tooltip>
+            </Label>
+          </div>
 
-        <Button onClick={restartSimulation}
-          className="bg-violet-800 border-violet-700 border hover:bg-violet-700 border-violet-600 cursor-pointer"
-        >
-          Restart
-        </Button>
+          <Button onClick={restartSimulation}
+            className="bg-violet-800 border-violet-700 border hover:bg-violet-700 border-violet-600 cursor-pointer"
+            disabled={!areParametersValid()}
+          >
+            Restart
+          </Button>
+        </div>
       </Card>
       </div>
     </div>
