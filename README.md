@@ -1,6 +1,8 @@
 ## Evolution Simulation
 This is a project about simulating [Evolution](https://en.wikipedia.org/wiki/Evolution) and it's [natural selection](https://en.wikipedia.org/wiki/Natural_selection)
 
+On the website you can change different parameters of the simulation and traits of species, then you will observe the different charts on how the species mutate and evolve (it shows the traits of the most popular species)
+
 ## TODO
 
 1. Make species and so that they can multiply ✅
@@ -10,7 +12,6 @@ This is a project about simulating [Evolution](https://en.wikipedia.org/wiki/Evo
 5. Add charts to show data of the simulation ✅
 7. Add parameters to the simulation ✅
 6. Publish to [Cloudflare Pages](pages.dev)
-9. Add more science stuff to the site (idk what for the moment being)
 
 ---
 

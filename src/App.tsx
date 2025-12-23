@@ -9,6 +9,8 @@ import { InfoIcon } from "lucide-react"
 import { Button } from "./components/ui/button"
 import { Input } from "./components/ui/input"
 import { Checkbox } from "./components/ui/checkbox"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 
 function getInitialParameters(): Parameters {
@@ -297,6 +299,15 @@ function App() {
                 </TooltipContent>
               </Tooltip>
             </Label>
+          </div>
+
+          <div className='mt-3'>
+            <a href='https://github.com/Anvarys/evolution-simulation' target='_blank'>
+              <div className='mt-3 bg-neutral-800 p-1 rounded-[0.5rem] border-neutral-700 border flex flex-row'>
+                <FontAwesomeIcon icon={faGithub} color='var(--color-neutral-100)' size='xl' className='mr-2'/>
+                <Label className='text-center cursor-pointer'>GitHub</Label>
+              </div>
+            </a>
           </div>
 
           <Button onClick={restartSimulation}

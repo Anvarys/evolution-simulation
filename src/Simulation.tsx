@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { mutateSpecies, traitsToString, type ChartDataPoint, type SimulationData, type SimulationParams, type Species } from "./types";
+import { mutateSpecies, type ChartDataPoint, type SimulationParams, type Species } from "./types";
 import { ChartContainer, type ChartConfig } from "./components/ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
@@ -22,9 +22,6 @@ const Simulation: React.FC<SimulationParams> = ({
   parameters,
   speciesRef
 }) => {
-  const [simulationData, setSimulationData] = useState<SimulationData>({
-    population: parameters.initialPopulation, time: 0, mostPopularSpeciesId: 0, mostPopularSpeciesCount: 0
-  })
 
   const frameIdRef = useRef<number>(-1);
   const [updateChartLines, setUpdateChartLines] = useState(0);
