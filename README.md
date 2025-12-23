@@ -3,7 +3,7 @@ This is a project about simulating [Evolution](https://en.wikipedia.org/wiki/Evo
 
 On the website you can change different parameters of the simulation and traits of species, then you will observe the different charts on how the species mutate and evolve (it shows the traits of the most popular species)
 
-[Open the website](evolution-simulation.pages.dev)
+[Open the website](https://evolution-simulation.pages.dev)
 
 ## TODO
 
