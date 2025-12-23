@@ -170,7 +170,7 @@ function App() {
         <div className="flex flex-col gap-3">
           <span className="text-center">Initial species</span>
           <div className="flex flex-col justify-between gap-1">
-            <Label className="">Life length
+            <Label className="text-[var(--life-length)]">Life length
               <Tooltip>
                 <TooltipTrigger>
                   <InfoIcon color="white" width='1rem' height='1rem'/>
@@ -193,7 +193,7 @@ function App() {
           </div>
 
           <div className="flex flex-col justify-between gap-1">
-            <Label className="">Time to mature
+            <Label className="text-[var(--time-to-mature)]">Time to mature
               <Tooltip>
                 <TooltipTrigger>
                   <InfoIcon color="white" width="1rem" height="1rem"/>
@@ -216,7 +216,7 @@ function App() {
           </div>
 
           <div className="flex flex-col justify-between gap-1">
-            <Label className="">Time to multiply
+            <Label className="text-[var(--time-to-multiply)]">Time to multiply
               <Tooltip>
                 <TooltipTrigger>
                   <InfoIcon color="white" width="1rem" height="1rem"/>
@@ -239,7 +239,7 @@ function App() {
           </div>
 
           <div className="flex flex-col justify-between gap-1">
-            <Label className="">Mutation chance
+            <Label className="text-[var(--mutation-chance)]">Mutation chance
               <Tooltip>
                 <TooltipTrigger>
                   <InfoIcon color="white" width="1rem" height="1rem"/>
@@ -262,7 +262,7 @@ function App() {
           </div>
 
           <div className="flex flex-col justify-between gap-1">
-            <Label className="">Mutation rate
+            <Label className="text-[var(--mutation-rate)]">Mutation rate
               <Tooltip>
                 <TooltipTrigger>
                   <InfoIcon color="white" width="1rem" height="1rem"/>

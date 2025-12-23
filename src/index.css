@@ -75,13 +75,11 @@
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.702 0.183 293.541);
 
-  --dead: #b84d4d;
-  --healthy: #ac63cf;
-  --infected: #51a96b;
-
-  --dead-lighter: #da5c5c;
-  --healthy-lighter: #c873ef;
-  --infected-lighter: #63cf83;
+  --life-length: #eb255d;
+  --time-to-multiply: #5f38fa;
+  --time-to-mature: #3ceb25;
+  --mutation-chance: #ffff80;
+  --mutation-rate: #ffbb00;
 }
 
 .dark {

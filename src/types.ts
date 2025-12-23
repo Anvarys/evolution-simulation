@@ -23,6 +23,8 @@ export type ChartDataPoint = {
     mostPopularSpeciesCount: number,
     mostPopularSpeciesLifeLenght: number,
     mostPopularSpeciesTimeToMature: number,
+    mostPopularSpeciesMutationChance: number,
+    mostPopularSpeciesMutationRate: number
 }
 
 export type Species = {

@@ -6,15 +6,15 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 const timesChartConfig = {
   mostPopularSpeciesTimeToMultiply: {
     label: "Time to Multiply",
-    color: "#5f38faff",
+    color: "var(--time-to-multiply)",
   },
   mostPopularSpeciesLifeLenght: {
     label: "Life Length",
-    color: "#eb255dff",
+    color: "var(--life-length)",
   },
   mostPopularSpeciesTimeToMature: {
     label: "Time to Mature",
-    color: "#3ceb25ff",
+    color: "var(--time-to-mature)",
   },
 } satisfies ChartConfig
 
@@ -27,8 +27,6 @@ const Simulation: React.FC<SimulationParams> = ({
   })
 
   const frameIdRef = useRef<number>(-1);
-  const [iterationsPerSecond, setIterationsPerSecond] = useState(0);
-  const simulationStartTimeRef = useRef<number>(performance.now());
   const [updateChartLines, setUpdateChartLines] = useState(0);
 
   const chartDataRef = useRef<ChartDataPoint[]>([]);
@@ -109,12 +107,7 @@ const Simulation: React.FC<SimulationParams> = ({
         ? keys.reduce((a, b) => creatureCount[a] > creatureCount[b] ? a : b)
         : 0;
 
-      setSimulationData({
-        population: creatures.length / dataPerCreature,
-        time: time,
-        mostPopularSpeciesId: popularSpeciesId,
-        mostPopularSpeciesCount: creatureCount[popularSpeciesId]
-      })
+      setUpdateChartLines(prev => prev + 1)
 
       chartDataRef.current.push({
         time: time,
@@ -123,10 +116,9 @@ const Simulation: React.FC<SimulationParams> = ({
         mostPopularSpeciesTimeToMultiply: speciesRef.current[popularSpeciesId].traits.timeToMultiply,
         mostPopularSpeciesLifeLenght: speciesRef.current[popularSpeciesId].traits.lifeLenght,
         mostPopularSpeciesTimeToMature: speciesRef.current[popularSpeciesId].traits.timeToMature,
+        mostPopularSpeciesMutationChance: speciesRef.current[popularSpeciesId].traits.mutationChance,
+        mostPopularSpeciesMutationRate: speciesRef.current[popularSpeciesId].traits.mutationRate
       } as ChartDataPoint)
-
-      if (frameIdRef.current % 10 === 0)
-      setIterationsPerSecond(time/(performance.now()-simulationStartTimeRef.current)*1000)
 
       if (creatures.length !== 0)
       frameIdRef.current = requestAnimationFrame(frameLoop);
@@ -136,10 +128,8 @@ const Simulation: React.FC<SimulationParams> = ({
   }, [])
 
   return (<>
-  
-  <div>iterations per frame: {parameters.iterationsPerFrame}<br/>population: {simulationData.population}<br/>current time: {simulationData.time}<br/>Avg iterations per second: {iterationsPerSecond.toFixed(0)}<br/><br/>Most popular species:<br/>{traitsToString(speciesRef.current[simulationData.mostPopularSpeciesId].traits)}</div>
-  <div>
-    <ChartContainer config={timesChartConfig} className="p-2 w-full flex-1 min-h-0">
+  <div className="w-full h-full flex flex-col">
+    <ChartContainer config={timesChartConfig} className="p-2 h-[calc(35%-5rem)]min-h-0 mt-4 w-full">
       <LineChart 
         key={frameIdRef.current+updateChartLines}
         data={chartDataRef.current}
@@ -147,10 +137,8 @@ const Simulation: React.FC<SimulationParams> = ({
       >
         <CartesianGrid vertical={false}/>
         <XAxis dataKey="time" 
-          tickMargin={0}
           tickLine={false}
-          startOffset={1}
-          interval={Math.floor(Math.max(Math.floor(chartDataRef.current.length/12/100)*100-1, parameters.iterationsPerFrame/10))}
+          tickFormatter={() => ''}
         />
         <YAxis
             tickLine={false}
@@ -175,6 +163,54 @@ const Simulation: React.FC<SimulationParams> = ({
           dataKey="mostPopularSpeciesTimeToMature"
           type="monotone"
           stroke="#3ceb25ff"
+          strokeWidth={2}
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </ChartContainer>
+    <ChartContainer config={timesChartConfig} className="p-2 h-[calc(15%-5rem)] flex-1 min-h-0 w-full">
+      <LineChart 
+        key={frameIdRef.current+updateChartLines}
+        data={chartDataRef.current}
+        margin={{}}
+      >
+        <CartesianGrid vertical={false}/>
+        <XAxis dataKey="time" 
+          tickLine={false}
+          tickFormatter={() => ''}
+        />
+        <YAxis
+            tickLine={false}
+        />
+        <Line 
+          dataKey="mostPopularSpeciesMutationChance"
+          type="monotone"
+          stroke="var(--mutation-chance)"
+          strokeWidth={2}
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </ChartContainer>
+    <ChartContainer config={timesChartConfig} className="p-2 h-[calc(15%-5rem)] flex-1 min-h-0 w-full">
+      <LineChart 
+        key={frameIdRef.current+updateChartLines}
+        data={chartDataRef.current}
+        margin={{}}
+      >
+        <CartesianGrid vertical={false}/>
+        <XAxis dataKey="time" 
+          tickLine={false}
+          tickFormatter={() => ''}
+        />
+        <YAxis
+            tickLine={false}
+        />
+        <Line 
+          dataKey="mostPopularSpeciesMutationRate"
+          type="monotone"
+          stroke="var(--mutation-rate)"
           strokeWidth={2}
           dot={false}
           isAnimationActive={false}
